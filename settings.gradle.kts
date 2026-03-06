@@ -1,0 +1,1 @@
+rootProject.name = "oris-sorokin-sem2-cw"
