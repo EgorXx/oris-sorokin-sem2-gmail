@@ -8,6 +8,7 @@ group = "ru.kpfu.itis.sorokin"
 version = "1.0-SNAPSHOT"
 
 val springVersion: String by project
+val springDataVersion: String by project
 val jakartaVersion: String by project
 val hibernateVersion: String by project
 val postgresVersion: String by project
@@ -29,6 +30,7 @@ dependencies {
     implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("org.freemarker:freemarker:$freemarkerVersion")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
+    implementation("org.springframework.data:spring-data-jpa:$springDataVersion")
 }
 
 //application {

@@ -1,31 +1,27 @@
 package ru.kpfu.itis.sorokin.repository;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.sorokin.model.User;
 
+import java.util.Optional;
 
-import java.util.List;
-
-@Component
+@Repository
 @Transactional
-public class UserRepository {
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByName(String name);
 
-    private final SessionFactory sessionFactory;
+    @Query(value = "select u from User u where u.name = :name")
+    Optional<User> getByName(String name);
 
-    public UserRepository(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    @Query(value = "select * from users u where u.name = ?1", nativeQuery = true)
+    Optional<User> getByNameNative(String name);
 
-    private Session getCurrentSession() {
-        return sessionFactory.getCurrentSession();
-    }
+    User save(User user);
 
-    @Transactional(readOnly = true)
-    public List<User> findAll() {
-        return getCurrentSession().createQuery("from User").list();
-    }
+    Optional<User> findById(Long id);
+
+    void deleteById(Long id);
 }

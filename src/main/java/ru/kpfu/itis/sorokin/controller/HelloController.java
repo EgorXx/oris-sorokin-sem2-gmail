@@ -25,9 +25,4 @@ public class HelloController {
     public String hello(@RequestParam(required = false, name = "name", defaultValue = "labubu") String name) {
         return helloService.sayHello(name);
     }
-
-    @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<UserDto> findAll() {
-        return userService.getAllUsers();
-    }
 }
