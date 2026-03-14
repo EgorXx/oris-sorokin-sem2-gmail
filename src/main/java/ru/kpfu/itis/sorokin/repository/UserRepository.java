@@ -11,13 +11,13 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByName(String name);
+    Optional<User> findByUsername(String username);
 
-    @Query(value = "select u from User u where u.name = :name")
-    Optional<User> getByName(String name);
+    @Query(value = "select u from User u where u.username = :username")
+    Optional<User> getByUsername(String username);
 
-    @Query(value = "select * from users u where u.name = ?1", nativeQuery = true)
-    Optional<User> getByNameNative(String name);
+    @Query(value = "select * from users u where u.username = ?1", nativeQuery = true)
+    Optional<User> getByUsernameNative(String username);
 
     User save(User user);
 

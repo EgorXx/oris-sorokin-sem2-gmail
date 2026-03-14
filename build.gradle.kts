@@ -14,6 +14,7 @@ val hibernateVersion: String by project
 val postgresVersion: String by project
 val freemarkerVersion: String by project
 val hikariVersion: String by project
+val springSecurityVersion: String by project
 
 repositories {
     mavenCentral()
@@ -31,6 +32,10 @@ dependencies {
     implementation("org.freemarker:freemarker:$freemarkerVersion")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
     implementation("org.springframework.data:spring-data-jpa:$springDataVersion")
+    implementation("org.springframework.security:spring-security-core:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-web:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-config:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
 }
 
 //application {
