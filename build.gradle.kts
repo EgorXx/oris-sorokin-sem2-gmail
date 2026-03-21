@@ -36,6 +36,7 @@ dependencies {
     implementation("org.springframework.security:spring-security-web:${springSecurityVersion}")
     implementation("org.springframework.security:spring-security-config:${springSecurityVersion}")
     implementation("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 }
 
 //application {

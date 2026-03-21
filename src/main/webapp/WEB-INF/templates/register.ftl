@@ -12,8 +12,6 @@
 </#if>
 
 <form action="/register" method="POST">
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
     <div>
         <label for="username">Имя пользователя:</label>
         <input type="text" id="username" name="username" required />

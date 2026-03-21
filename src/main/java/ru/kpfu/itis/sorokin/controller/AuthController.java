@@ -20,8 +20,6 @@ public class AuthController {
 
     @GetMapping("/register")
     public String register(Model model, HttpServletRequest request) {
-        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-        model.addAttribute("_csrf", csrfToken);
         return "register";
     }
 

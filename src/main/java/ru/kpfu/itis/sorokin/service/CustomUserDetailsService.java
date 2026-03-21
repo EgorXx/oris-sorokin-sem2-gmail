@@ -21,12 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("Начался процесс поиска пользователя");
-
         Optional<User> user = userRepository.findByUsername(username);
-
-        System.out.println("Пользователь найден " + user.get().getUsername() + " " + user.get().getPassword());
-
         return user.map(CustomUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
     }
