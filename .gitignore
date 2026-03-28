@@ -43,3 +43,4 @@ bin/
 
 ### Files ###
 *.properties
+*.env

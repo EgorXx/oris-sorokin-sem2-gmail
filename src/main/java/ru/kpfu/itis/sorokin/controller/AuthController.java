@@ -35,4 +35,27 @@ public class AuthController {
             return "register";
         }
     }
+
+    @GetMapping("/verification")
+    public String verification(@RequestParam String token, Model model) {
+        try {
+            userService.verify(token);
+            model.addAttribute("message", "Почта успешно подтверждена");
+            model.addAttribute("success", true);
+        } catch (Exception e) {
+            model.addAttribute("message", "Подтверждение не удалось");
+            model.addAttribute("success", false);
+        }
+
+        return "verify-result";
+    }
+
+    @GetMapping("/login")
+    public String loginPage(@RequestParam(required = false) String error,
+                            Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Неверный username или password");
+        }
+        return "login";
+    }
 }

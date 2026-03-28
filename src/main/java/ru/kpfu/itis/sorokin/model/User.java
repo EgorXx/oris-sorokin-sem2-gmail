@@ -20,6 +20,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String password;
 
+    @Column(name = "is_verified", nullable = false)
+    private Boolean isVerified;
+
     @ManyToMany
     @JoinTable(
             name = "user_role",
@@ -77,6 +80,14 @@ public class User {
 
     public void setVerificationToken(String verificationToken) {
         this.verificationToken = verificationToken;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
     }
 
     @Override

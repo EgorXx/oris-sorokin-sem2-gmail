@@ -58,6 +58,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
         user.setVerificationToken(verificationToken);
         user.setRoles(List.of(role));
+        user.setVerified(false);
 
         try {
             userRepository.save(user);
@@ -80,13 +81,25 @@ public class UserService {
             helper.setTo(email);
             helper.setSubject(mailProperties.getSubject());
 
-            content.replace("$name", userRegisterDto.username());
-            content.replace("$url", mailProperties.getBaseUrl() + "/verification?token=" + verificationToken);
+            content = content.replace("$name", userRegisterDto.username());
+            content = content.replace("$url", mailProperties.getBaseUrl() + "/verification?token=" + verificationToken);
+
+            System.out.println(content);
 
             helper.setText(content, true);
+
+            javaMailSender.send(mimeMessage);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void verify(String token) {
+        User user = userRepository.findByVerificationToken(token).orElseThrow(
+                () -> new RuntimeException("Пользователь с таким токеном не найден"));
+
+        user.setVerified(true);
+        userRepository.save(user);
     }
 
     public UserDto create(UserCreateDto user) {

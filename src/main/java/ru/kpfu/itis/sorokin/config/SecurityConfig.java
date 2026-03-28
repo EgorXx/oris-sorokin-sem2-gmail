@@ -41,16 +41,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/index", "/register", "/notes/public", "/login").anonymous()
+                        .requestMatchers("/index", "/register", "/notes/public", "/login", "/verification").anonymous()
                         .requestMatchers("/notes/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .requestMatchers("/error/**").permitAll()
                         .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/hello", true)
+                        .permitAll()
                 ).build();
-//                .formLogin(form -> form
-//                        .defaultSuccessUrl("/hello", true)
-//                        .permitAll()
-//                ).build();
     }
 
 //    @Bean
