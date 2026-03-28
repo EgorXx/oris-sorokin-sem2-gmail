@@ -1,5 +1,8 @@
 package ru.kpfu.itis.sorokin.service;
 
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.sorokin.dto.UserCreateDto;
@@ -7,21 +10,27 @@ import ru.kpfu.itis.sorokin.dto.UserDto;
 import ru.kpfu.itis.sorokin.dto.UserRegisterDto;
 import ru.kpfu.itis.sorokin.model.Role;
 import ru.kpfu.itis.sorokin.model.User;
+import ru.kpfu.itis.sorokin.properties.MailProperties;
 import ru.kpfu.itis.sorokin.repository.RoleRepository;
 import ru.kpfu.itis.sorokin.repository.UserRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final JavaMailSender javaMailSender;
+    private final MailProperties mailProperties;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, JavaMailSender javaMailSender, MailProperties mailProperties) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.javaMailSender = javaMailSender;
+        this.mailProperties = mailProperties;
     }
 
     public List<UserDto> getAllUsers() {
@@ -39,19 +48,44 @@ public class UserService {
 
         String password = userRegisterDto.password();
 
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-
         Role role = roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
+        String verificationToken = UUID.randomUUID().toString();
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setVerificationToken(verificationToken);
         user.setRoles(List.of(role));
 
         try {
             userRepository.save(user);
         }  catch (Exception e) {
             throw new RuntimeException("Ошибка сохранения пользователя: " + e.getMessage());
+        }
+
+        sendVerificationMail(userRegisterDto, verificationToken);
+    }
+
+    private void sendVerificationMail(UserRegisterDto userRegisterDto, String verificationToken) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+        String content = mailProperties.getContent();
+        try {
+            helper.setFrom(mailProperties.getFrom(), mailProperties.getSender());
+
+            String email = userRegisterDto.username() + "@gmail.com";
+
+            helper.setTo(email);
+            helper.setSubject(mailProperties.getSubject());
+
+            content.replace("$name", userRegisterDto.username());
+            content.replace("$url", mailProperties.getBaseUrl() + "/verification?token=" + verificationToken);
+
+            helper.setText(content, true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

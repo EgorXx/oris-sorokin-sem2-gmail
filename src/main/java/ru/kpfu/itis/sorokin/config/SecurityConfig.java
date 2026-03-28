@@ -29,36 +29,34 @@ public class SecurityConfig {
 //                .and().build();
 //    }
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+//    @Bean
+//    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//        authProvider.setUserDetailsService(userDetailsService);
+//        authProvider.setPasswordEncoder(passwordEncoder());
+//        return authProvider;
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/", "/register", "/notes/public").permitAll()
+                        .requestMatchers("/index", "/register", "/notes/public", "/login").anonymous()
                         .requestMatchers("/notes/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/error/**").permitAll()
                         .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .defaultSuccessUrl("/hello", true)
-                        .permitAll()
-                )
-                .httpBasic(Customizer.withDefaults());
-
-        return http.build();
+                ).build();
+//                .formLogin(form -> form
+//                        .defaultSuccessUrl("/hello", true)
+//                        .permitAll()
+//                ).build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.debug(true)
-                .ignoring()
-                .requestMatchers("/css/**", "/template/**", "/js/**", "/images/**", "favicon.ico");
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web -> web.debug(true)
+//                .ignoring()
+//                .requestMatchers("/css/**", "/template/**", "/js/**", "/images/**", "favicon.ico");
+//    }
 }

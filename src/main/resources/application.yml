@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/springoris
+    username: postgres
+    password: qwerty007
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  liquibase:
+    enabled: true
+
+  freemarker:
+    enabled: true
+    template-loader-path: /WEB-INF/templates
+    suffix: .
+
+  mail:
+    host: smtp.gmail.com
+    username: "sorokine329@gmail.com"
+    password: "ofli vdzl gzow jhsh"
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectionTimeout: 5000
+          timeout: 5000
+          writeTimeout: 5000
+          starttls:
+            enable: true
+
+mail:
+  sender: Test Application
+  from: ${spring.mail.username}
+  subject: Please verify your account
+  content: "Dear $name, please follow the link bellow to verify your account: <a href=${url}>VERIFY(Источник поверь мне брат)</a>"

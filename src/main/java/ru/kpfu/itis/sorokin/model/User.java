@@ -14,6 +14,9 @@ public class User {
     @Column(nullable = false)
     private String username;
 
+    @Column(name = "verification_token")
+    private String verificationToken;
+
     @Column(nullable = false, unique = true)
     private String password;
 
@@ -66,6 +69,14 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
     }
 
     @Override

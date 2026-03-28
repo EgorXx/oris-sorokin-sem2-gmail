@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.sorokin.dto.NoteFormDto;
 import ru.kpfu.itis.sorokin.dto.NoteViewDto;
-import ru.kpfu.itis.sorokin.dto.UserDto;
 import ru.kpfu.itis.sorokin.dto.UserViewDto;
 import ru.kpfu.itis.sorokin.model.Note;
 import ru.kpfu.itis.sorokin.model.User;
@@ -13,7 +12,6 @@ import ru.kpfu.itis.sorokin.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class NoteService {
